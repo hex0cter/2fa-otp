@@ -1,6 +1,6 @@
 # 2FA token generator
 Generator the two factor authentication token from existing secret.
 
-## Available Scripts
+## Demo
 
-Checkout [here](https://hex0cter.github.io/2fa-token/)
+Checkout [here](https://hex0cter.github.io/2fa-token/).

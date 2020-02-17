@@ -8,7 +8,7 @@ install:
     - yarn install
     - yarn build
 script:
-    - rm -rf node_modules package.json public references src yarn.lock
+    - rm -rf node_modules package.json public src yarn.lock
     - mv build/* .
     - git checkout -b local && git add .
     - "git commit -m \"Update gh-pages (Travis build: $TRAVIS_BUILD_NUMBER)\""
