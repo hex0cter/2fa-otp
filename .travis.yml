@@ -1,0 +1,17 @@
+language: node_js
+node_js:
+  - "10"
+branches:
+  only:
+  - master
+install:
+    - yarn install
+    - yarn build
+script:
+    - rm -rf node_modules package.json public references src yarn.lock
+    - mv build/* .
+    - git checkout -b local && git add .
+    - "git commit -m \"Update gh-pages (Travis build: $TRAVIS_BUILD_NUMBER)\""
+after_success:
+    - git remote set-url origin https://${GITHUB_TOKEN}@github.com/hex0cter/2fa-token.git
+    - git push origin HEAD:gh-pages --force
