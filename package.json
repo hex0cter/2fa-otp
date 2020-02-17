@@ -2,6 +2,7 @@
   "name": "2fa-token",
   "version": "0.1.0",
   "private": true,
+  "homepage": "https://hex0cter.github.io/2fa-token/",
   "dependencies": {
     "@ionic/react": "^5.0.0",
     "@testing-library/jest-dom": "^4.2.4",
