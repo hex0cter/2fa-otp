@@ -1,16 +1,9 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React from 'react'
+import './App.css'
 import TwoFactorTokenGenerator from './components/two-factor-token-generator'
 
 function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <TwoFactorTokenGenerator />
-      </header>
-    </div>
-  );
+  return <TwoFactorTokenGenerator />
 }
 
-export default App;
+export default App
