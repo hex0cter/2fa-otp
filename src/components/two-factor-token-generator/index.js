@@ -14,6 +14,8 @@ const TwoFactorTokenGenerator = (props) => {
     const newSecret = event.target.value
     if (newSecret) {
       setSecret(newSecret)
+      console.log('update secret to', newSecret)
+      generateCode()
       localStorage.setItem('TwoFactorTokenSecret', newSecret)
     }
   }
@@ -30,12 +32,18 @@ const TwoFactorTokenGenerator = (props) => {
     setTimeout(() => setButtonText('Copy'), 1500)
   }
 
-  setInterval(() => {
+  const generateCode = () => {
+    console.log('generateCode called')
     const newTotpCode = secret ? authenticator.generate(secret) : ''
     if (newTotpCode !== code) {
       setCode(newTotpCode)
     }
-  }, 2000)
+  }
+
+  // setInterval(() => {
+  //   console.log('timeout')
+  //   generateCode()
+  // }, 5000)
 
   return (
     <IonCard>
@@ -44,10 +52,11 @@ const TwoFactorTokenGenerator = (props) => {
     </IonCardHeader>
 
     <IonCardContent>
-      <div className={styles.twoFactorContainer} onClick={() => copyToClipboard(code)}>
+      <div className={styles.twoFactorContainer}>
         <IonInput className={styles.secret} value={secret} onIonChange={updateSecret} placeholder="Please fill in the secret here."/>
         <div className={styles.result}>
         <div>Token: {code} </div>
+          <IonButton onClick={generateCode}>Refresh</IonButton>
           <IonButton onClick={() => copyToClipboard(code)}>{buttonText}</IonButton>
         </div>
       </div>
