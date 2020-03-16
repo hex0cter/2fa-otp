@@ -27,7 +27,7 @@ const TwoFactorTokenGenerator = (props) => {
     document.body.removeChild(el)
 
     setButtonText('Copied')
-    setTimeout(() => setButtonText('Copy'), 400)
+    setTimeout(() => setButtonText('Copy'), 1500)
   }
 
   setInterval(() => {
@@ -44,7 +44,7 @@ const TwoFactorTokenGenerator = (props) => {
     </IonCardHeader>
 
     <IonCardContent>
-      <div className={styles.twoFactorContainer}>
+      <div className={styles.twoFactorContainer} onClick={() => copyToClipboard(code)}>
         <IonInput className={styles.secret} value={secret} onIonChange={updateSecret} placeholder="Please fill in the secret here."/>
         <div className={styles.result}>
         <div>Token: {code} </div>

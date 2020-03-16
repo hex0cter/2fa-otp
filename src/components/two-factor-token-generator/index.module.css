@@ -9,4 +9,5 @@
 
 .twoFactorContainer {
   min-width: 700px;
+  cursor: pointer;
 }
