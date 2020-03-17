@@ -48,7 +48,7 @@ const TwoFactorTokenGenerator = (props) => {
   return (
     <IonCard>
     <IonCardHeader>
-      <IonCardTitle>TOPT Secret</IonCardTitle>
+      <IonCardTitle>TOTP Secret</IonCardTitle>
     </IonCardHeader>
 
     <IonCardContent>
