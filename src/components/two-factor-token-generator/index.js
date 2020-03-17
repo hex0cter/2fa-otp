@@ -3,18 +3,17 @@ import React, { useState } from 'react'
 import { IonButton, IonCard, IonCardContent, IonCardHeader, IonCardTitle, IonInput } from '@ionic/react'
 import styles from './index.module.css'
 
-const TwoFactorTokenGenerator = (props) => {
+const TwoFactorTokenGenerator = () => {
   const [ secret, setSecret ] = useState(localStorage.getItem('TwoFactorTokenSecret') || null)
   const totpCode = secret ? authenticator.generate(secret) : ''
   const [ code, setCode ] = useState(totpCode)
-  const [ buttonText, setButtonText ] = useState('Copy')
+  const [ copyButtonText, setCopyButtonText ] = useState('Copy')
+  const [ refreshButtonText, setRefreshButtonText ] = useState('Refresh')
 
   const updateSecret = (event) => {
-    console.log('event happened')
     const newSecret = event.target.value
     if (newSecret) {
       setSecret(newSecret)
-      console.log('update secret to', newSecret)
       generateCode()
       localStorage.setItem('TwoFactorTokenSecret', newSecret)
     }
@@ -28,36 +27,33 @@ const TwoFactorTokenGenerator = (props) => {
     document.execCommand('copy')
     document.body.removeChild(el)
 
-    setButtonText('Copied')
-    setTimeout(() => setButtonText('Copy'), 1500)
+    setCopyButtonText('Copied')
+    setTimeout(() => setCopyButtonText('Copy'), 1500)
   }
 
   const generateCode = () => {
-    console.log('generateCode called')
+    setRefreshButtonText('Refreshing')
     const newTotpCode = secret ? authenticator.generate(secret) : ''
     if (newTotpCode !== code) {
       setCode(newTotpCode)
     }
+    setTimeout(() => setRefreshButtonText('Refresh'), 1500)
   }
 
-  // setInterval(() => {
-  //   console.log('timeout')
-  //   generateCode()
-  // }, 5000)
+  window.addEventListener("focus", generateCode)
 
   return (
     <IonCard>
     <IonCardHeader>
       <IonCardTitle>TOTP Secret</IonCardTitle>
     </IonCardHeader>
-
     <IonCardContent>
       <div className={styles.twoFactorContainer}>
         <IonInput className={styles.secret} value={secret} onIonChange={updateSecret} placeholder="Please fill in the secret here."/>
         <div className={styles.result}>
         <div>Token: {code} </div>
-          <IonButton onClick={generateCode}>Refresh</IonButton>
-          <IonButton onClick={() => copyToClipboard(code)}>{buttonText}</IonButton>
+          <IonButton onClick={() => copyToClipboard(code)}>{copyButtonText}</IonButton>
+          <IonButton onClick={generateCode}>{refreshButtonText}</IonButton>
         </div>
       </div>
     </IonCardContent>
