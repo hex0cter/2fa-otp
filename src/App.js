@@ -1,6 +1,6 @@
 import React from 'react'
 import './App.css'
-import TwoFactorTokenGenerator from './components/two-factor-token-generator'
+import TwoFactorTokenGenerator from './components/TwoFactorTokenGenerator'
 
 function App() {
   return <TwoFactorTokenGenerator />
