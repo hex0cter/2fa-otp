@@ -14,6 +14,7 @@ jobs:
           ref: "${{ github.head_ref }}"
       - name: Build and Publish
         run: |
+          yarn install && yarn build
           rm -rf node_modules package.json public src yarn.lock
           mv build/* .
           git checkout -b local && git add .
