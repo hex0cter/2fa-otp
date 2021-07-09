@@ -1,7 +1,7 @@
 # 2FA token generator
-[![Build Status](https://travis-ci.org/hex0cter/2fa-otp.svg?branch=master)](https://travis-ci.org/hex0cter/2fa-otp)
+[![Publish](https://github.com/hex0cter/2fa-otp/actions/workflows/publish.yaml/badge.svg)](https://github.com/hex0cter/2fa-otp/actions/workflows/publish.yaml)
 
-Generate the two factor authentication token from existing secret.
+Generate the two factor authentication token based on the OTP secret.
 
 ## Demo
 

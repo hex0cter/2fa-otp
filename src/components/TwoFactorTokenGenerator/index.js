@@ -1,15 +1,17 @@
 import { authenticator } from "otplib"
 import React, { useState } from 'react'
 import HourglassFullIcon from '@material-ui/icons/HourglassFull';
+import GitHubIcon from '@material-ui/icons/GitHub';
 import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
+import Link from '@material-ui/core/Link';
 import { createTheme, ThemeProvider } from '@material-ui/core/styles';
-import styles from './index.module.css'
-import SecretField from '../SecretField'
+import styles from './index.module.css';
+import SecretField from '../SecretField';
 
 const TwoFactorTokenGenerator = () => {
   const [ secret, setSecret ] = useState(localStorage.getItem('TwoFactorTokenSecret') || null)
@@ -64,7 +66,7 @@ const TwoFactorTokenGenerator = () => {
   return (
   <ThemeProvider theme={theme}>
     <Card variant="outlined" >
-      <AppBar position="static" color="secondary">
+      <AppBar position="static" color="secondary" className={styles.appBar}>
         <Toolbar>
           <Typography variant="subtitle2">
           Fill in your OTP secret to get the latest 2FA code. <br/>
@@ -77,12 +79,19 @@ const TwoFactorTokenGenerator = () => {
           <SecretField secret={secret} onChange={updateSecret} />
           <div className={styles.result}>
             <div>Token: {code} </div>
-              <Button variant="contained" color="primary" onClick={() => copyToClipboard(code)} className={styles.RefreshButton}>{copyButtonText}</Button> &nbsp;
-              <Button variant="contained" color="primary" onClick={generateCode} className={styles.RefreshButton}>{refreshButtonText}</Button>
+              <Button variant="contained" color="primary" onClick={() => copyToClipboard(code)} className={styles.refreshButton}>{copyButtonText}</Button> &nbsp;
+              <Button variant="contained" color="primary" onClick={generateCode} className={styles.refreshButton}>{refreshButtonText}</Button>
           </div>
         </div>
       </CardContent>
     </Card>
+    <div className={styles.footer}>
+      <Typography variant="body1">
+        <Link href="https://github.com/hex0cter/2fa-otp">
+          <GitHubIcon fontSize="small"/>
+        </Link>
+      </Typography>
+    </div>
   </ThemeProvider>
 
   )
