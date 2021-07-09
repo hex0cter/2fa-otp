@@ -9,7 +9,6 @@ import Visibility from '@material-ui/icons/Visibility';
 import VisibilityOff from '@material-ui/icons/VisibilityOff';
 import styles from './index.module.css'
 
-
 export default function SecretInput(props) {
   const [values, setValues] = React.useState({
     showPassword: false,

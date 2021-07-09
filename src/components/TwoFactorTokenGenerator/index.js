@@ -7,10 +7,9 @@ import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
+import { createTheme, ThemeProvider } from '@material-ui/core/styles';
 import styles from './index.module.css'
 import SecretField from '../SecretField'
-import { createTheme, ThemeProvider } from '@material-ui/core/styles';
-import { orange } from '@material-ui/core/colors';
 
 const TwoFactorTokenGenerator = () => {
   const [ secret, setSecret ] = useState(localStorage.getItem('TwoFactorTokenSecret') || null)
@@ -43,10 +42,10 @@ const TwoFactorTokenGenerator = () => {
   const theme = createTheme({
     palette: {
       primary: {
-        main: "#2196f3",
+        main: "#009688",
       },
       secondary: {
-        main: orange[500],
+        main: "#aed581",
       },
     },
   });
@@ -63,11 +62,12 @@ const TwoFactorTokenGenerator = () => {
   window.addEventListener("focus", generateCode);
 
   return (
+  <ThemeProvider theme={theme}>
     <Card variant="outlined" >
-      <AppBar position="static">
+      <AppBar position="static" color="secondary">
         <Toolbar>
           <Typography variant="subtitle2">
-          Fill in your OTP secret to get the latest One time password. <br/>
+          Fill in your OTP secret to get the latest 2FA code. <br/>
           Your secret is only cached locally and never sent over the internet.
           </Typography>
         </Toolbar>
@@ -77,14 +77,13 @@ const TwoFactorTokenGenerator = () => {
           <SecretField secret={secret} onChange={updateSecret} />
           <div className={styles.result}>
             <div>Token: {code} </div>
-            <ThemeProvider theme={theme}>
               <Button variant="contained" color="primary" onClick={() => copyToClipboard(code)} className={styles.RefreshButton}>{copyButtonText}</Button> &nbsp;
               <Button variant="contained" color="primary" onClick={generateCode} className={styles.RefreshButton}>{refreshButtonText}</Button>
-            </ThemeProvider>
           </div>
         </div>
       </CardContent>
     </Card>
+  </ThemeProvider>
 
   )
 }
