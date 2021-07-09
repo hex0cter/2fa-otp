@@ -1,0 +1,28 @@
+# DO NOT EDIT MANUALLY. Workflow generated from ci/workflow/scripts/generate-workflow.sh.
+jobs:
+  api-docs:
+    runs-on:
+      - ubuntu-latest
+    steps:
+      - name: Cancel Previous Run
+        uses: "styfle/cancel-workflow-action@0.6.0"
+        with:
+          access_token: "${{ secrets.GITHUB_TOKEN }}"
+      - name: Checkout Code
+        uses: "actions/checkout@v2"
+        with:
+          ref: "${{ github.head_ref }}"
+      - name: Build and Publish
+        run: |
+          rm -rf node_modules package.json public src yarn.lock
+          mv build/* .
+          git checkout -b local && git add .
+          git commit -m "Update gh-pages"
+          git push origin HEAD:gh-pages --force
+    timeout-minutes: 10
+name: Publish
+on:
+  push:
+    branches:
+      - master
+  workflow_dispatch: {}
