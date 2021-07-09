@@ -16,3 +16,7 @@
   display: flex;
   justify-content: space-between;
 }
+
+.Disclaimer {
+  font-size: 14;
+}
