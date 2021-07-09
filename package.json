@@ -1,14 +1,14 @@
 {
-  "name": "2fa-token",
+  "name": "2fa-otp",
   "version": "0.1.0",
   "private": true,
-  "homepage": "https://hex0cter.github.io/2fa-token/",
+  "homepage": "https://hex0cter.github.io/2fa-otp/",
   "dependencies": {
     "@emotion/react": "^11.4.0",
     "@emotion/styled": "^11.3.0",
     "@ionic/react": "^5.0.0",
-    "@material-ui/core": "^5.0.0-beta.0",
-    "@material-ui/icons": "^5.0.0-beta.0",
+    "@material-ui/core": "latest",
+    "@material-ui/icons": "latest",
     "@testing-library/jest-dom": "^4.2.4",
     "@testing-library/react": "^9.3.2",
     "@testing-library/user-event": "^7.1.2",
