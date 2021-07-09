@@ -20,3 +20,7 @@
 .Disclaimer {
   font-size: 14;
 }
+
+.RefreshButton {
+  min-width: 100px !important;
+}

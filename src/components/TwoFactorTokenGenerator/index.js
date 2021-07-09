@@ -1,6 +1,5 @@
 import { authenticator } from "otplib"
 import React, { useState } from 'react'
-import { makeStyles } from '@material-ui/core/styles';
 import HourglassFullIcon from '@material-ui/icons/HourglassFull';
 import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
@@ -10,7 +9,8 @@ import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
 import styles from './index.module.css'
 import SecretField from '../SecretField'
-
+import { createTheme, ThemeProvider } from '@material-ui/core/styles';
+import { orange } from '@material-ui/core/colors';
 
 const TwoFactorTokenGenerator = () => {
   const [ secret, setSecret ] = useState(localStorage.getItem('TwoFactorTokenSecret') || null)
@@ -40,6 +40,17 @@ const TwoFactorTokenGenerator = () => {
     setTimeout(() => setCopyButtonText('Copy'), 1500)
   }
 
+  const theme = createTheme({
+    palette: {
+      primary: {
+        main: "#2196f3",
+      },
+      secondary: {
+        main: orange[500],
+      },
+    },
+  });
+
   const generateCode = () => {
     setRefreshButtonText(<HourglassFullIcon />)
     const newTotpCode = secret ? authenticator.generate(secret) : ''
@@ -50,13 +61,6 @@ const TwoFactorTokenGenerator = () => {
   }
 
   window.addEventListener("focus", generateCode);
-
-  const useStyles = makeStyles((theme) => ({
-    button: {
-      margin: theme.spacing(1),
-    },
-  }));
-  const classes = useStyles();
 
   return (
     <Card variant="outlined" >
@@ -73,10 +77,10 @@ const TwoFactorTokenGenerator = () => {
           <SecretField secret={secret} onChange={updateSecret} />
           <div className={styles.result}>
             <div>Token: {code} </div>
-            <div>
-              <Button variant="contained" color="primary" onClick={() => copyToClipboard(code)} className={classes.button}>{copyButtonText}</Button>
-              <Button variant="contained" color="default" onClick={generateCode}>{refreshButtonText}</Button>
-            </div>
+            <ThemeProvider theme={theme}>
+              <Button variant="contained" color="primary" onClick={() => copyToClipboard(code)} className={styles.RefreshButton}>{copyButtonText}</Button> &nbsp;
+              <Button variant="contained" color="primary" onClick={generateCode} className={styles.RefreshButton}>{refreshButtonText}</Button>
+            </ThemeProvider>
           </div>
         </div>
       </CardContent>
