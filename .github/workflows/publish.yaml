@@ -1,6 +1,5 @@
-# DO NOT EDIT MANUALLY. Workflow generated from ci/workflow/scripts/generate-workflow.sh.
 jobs:
-  api-docs:
+  build-dist:
     runs-on:
       - ubuntu-latest
     steps:
@@ -14,9 +13,13 @@ jobs:
           ref: "${{ github.head_ref }}"
       - name: Build and Publish
         run: |
+          shopt -s extglob
           yarn install && yarn build
-          rm -rf node_modules package.json public src yarn.lock
+          # rm -rf node_modules package.json public src yarn.lock
+          rm -v !("build"|".git")
           mv build/* .
+          git config --global user.email "hex0cter@gmail.com"
+          git config --global user.name "Daniel Han"
           git checkout -b local && git add .
           git commit -m "Update gh-pages"
           git push origin HEAD:gh-pages --force
