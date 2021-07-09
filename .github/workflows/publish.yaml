@@ -16,7 +16,7 @@ jobs:
           shopt -s extglob
           yarn install && yarn build
           # rm -rf node_modules package.json public src yarn.lock
-          rm -v !("build"|".git")
+          rm -vrf !("build"|".git")
           mv build/* .
           git config --global user.email "hex0cter@gmail.com"
           git config --global user.name "Daniel Han"
