@@ -2,17 +2,16 @@ import { authenticator } from "otplib";
 import React, { useState } from "react";
 import HourglassFullIcon from "@material-ui/icons/HourglassFull";
 import CircularProgress from "@material-ui/core/CircularProgress";
-import GitHubIcon from "@material-ui/icons/GitHub";
 import Card from "@material-ui/core/Card";
 import CardContent from "@material-ui/core/CardContent";
 import AppBar from "@material-ui/core/AppBar";
 import Toolbar from "@material-ui/core/Toolbar";
 import Button from "@material-ui/core/Button";
 import Typography from "@material-ui/core/Typography";
-import Link from "@material-ui/core/Link";
 import { createTheme, ThemeProvider } from "@material-ui/core/styles";
 import styles from "./index.module.css";
 import SecretField from "../SecretField";
+import Footer from "../Footer";
 
 const TwoFactorTokenGenerator = () => {
   const [secret, setSecret] = useState(
@@ -34,12 +33,12 @@ const TwoFactorTokenGenerator = () => {
   };
 
   const copyToClipboard = (str) => {
-    const el = document.createElement("textarea");
-    el.value = str;
-    document.body.appendChild(el);
-    el.select();
+    const element = document.createElement("textarea");
+    element.value = str;
+    document.body.appendChild(element);
+    element.select();
     document.execCommand("copy");
-    document.body.removeChild(el);
+    document.body.removeChild(element);
 
     setCopyButtonText("Copied");
     setTimeout(() => setCopyButtonText("Copy"), 1500);
@@ -126,13 +125,7 @@ const TwoFactorTokenGenerator = () => {
           </div>
         </CardContent>
       </Card>
-      <div className={styles.footer}>
-        <Typography variant="body1">
-          <Link href="https://github.com/hex0cter/2fa-otp">
-            <GitHubIcon fontSize="small" />
-          </Link>
-        </Typography>
-      </div>
+      <Footer/>
     </ThemeProvider>
   );
 };
