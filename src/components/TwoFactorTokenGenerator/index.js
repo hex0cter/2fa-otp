@@ -45,7 +45,7 @@ export default function TwoFactorTokenGenerator() {
     setProgress(percentage);
 
     if (percentage < 10) {
-      setTimeout(generateCode, 2000);
+      setTimeout(generateCode, 2500);
     }
   };
 
