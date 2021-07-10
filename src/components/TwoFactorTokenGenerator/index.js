@@ -1,6 +1,7 @@
 import { authenticator } from "otplib"
 import React, { useState } from 'react'
 import HourglassFullIcon from '@material-ui/icons/HourglassFull';
+import CircularProgress from '@material-ui/core/CircularProgress';
 import GitHubIcon from '@material-ui/icons/GitHub';
 import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
@@ -19,6 +20,7 @@ const TwoFactorTokenGenerator = () => {
   const [ code, setCode ] = useState(totpCode)
   const [ copyButtonText, setCopyButtonText ] = useState('Copy')
   const [ refreshButtonText, setRefreshButtonText ] = useState('Refresh')
+  const [ progress, setProgress ] = useState(100);
 
   const updateSecret = (event) => {
     const newSecret = event.target.value
@@ -52,16 +54,30 @@ const TwoFactorTokenGenerator = () => {
     },
   });
 
+  const updateProgress = () => {
+    const secondElapsed = Math.round((Date.now()/1000)) % 30;
+    const secondsRemain = 30 - secondElapsed;
+    const percentage = secondsRemain * 100 / 30;
+    setProgress(percentage);
+
+    if (percentage < 10) {
+      setTimeout(generateCode, 2000);
+    }
+  }
+
   const generateCode = () => {
     setRefreshButtonText(<HourglassFullIcon />)
     const newTotpCode = secret ? authenticator.generate(secret) : ''
     if (newTotpCode !== code) {
       setCode(newTotpCode)
     }
-    setTimeout(() => setRefreshButtonText('Refresh'), 100)
+    setTimeout(() => setRefreshButtonText('Refresh'), 100);
   }
 
   window.addEventListener("focus", generateCode);
+  window.addEventListener("load", () => {
+    setInterval(updateProgress, 2000);
+  });
 
   return (
   <ThemeProvider theme={theme}>
@@ -78,9 +94,12 @@ const TwoFactorTokenGenerator = () => {
         <div className={styles.twoFactorContainer}>
           <SecretField secret={secret} onChange={updateSecret} />
           <div className={styles.result}>
-            <div>Token: {code} </div>
-              <Button variant="contained" color="primary" onClick={() => copyToClipboard(code)} className={styles.refreshButton}>{copyButtonText}</Button> &nbsp;
-              <Button variant="contained" color="primary" onClick={generateCode} className={styles.refreshButton}>{refreshButtonText}</Button>
+            <div>
+              Token: {code} &nbsp;
+              <CircularProgress variant="determinate" value={progress} size={20} />
+            </div>
+            <Button variant="contained" color="primary" onClick={() => copyToClipboard(code)} className={styles.refreshButton}>{copyButtonText}</Button> &nbsp;
+            <Button variant="contained" color="primary" onClick={generateCode} className={styles.refreshButton}>{refreshButtonText}</Button>
           </div>
         </div>
       </CardContent>
