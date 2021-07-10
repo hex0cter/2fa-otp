@@ -1,47 +1,49 @@
-import { authenticator } from "otplib"
-import React, { useState } from 'react'
-import HourglassFullIcon from '@material-ui/icons/HourglassFull';
-import CircularProgress from '@material-ui/core/CircularProgress';
-import GitHubIcon from '@material-ui/icons/GitHub';
-import Card from '@material-ui/core/Card';
-import CardContent from '@material-ui/core/CardContent';
-import AppBar from '@material-ui/core/AppBar';
-import Toolbar from '@material-ui/core/Toolbar';
-import Button from '@material-ui/core/Button';
-import Typography from '@material-ui/core/Typography';
-import Link from '@material-ui/core/Link';
-import { createTheme, ThemeProvider } from '@material-ui/core/styles';
-import styles from './index.module.css';
-import SecretField from '../SecretField';
+import { authenticator } from "otplib";
+import React, { useState } from "react";
+import HourglassFullIcon from "@material-ui/icons/HourglassFull";
+import CircularProgress from "@material-ui/core/CircularProgress";
+import GitHubIcon from "@material-ui/icons/GitHub";
+import Card from "@material-ui/core/Card";
+import CardContent from "@material-ui/core/CardContent";
+import AppBar from "@material-ui/core/AppBar";
+import Toolbar from "@material-ui/core/Toolbar";
+import Button from "@material-ui/core/Button";
+import Typography from "@material-ui/core/Typography";
+import Link from "@material-ui/core/Link";
+import { createTheme, ThemeProvider } from "@material-ui/core/styles";
+import styles from "./index.module.css";
+import SecretField from "../SecretField";
 
 const TwoFactorTokenGenerator = () => {
-  const [ secret, setSecret ] = useState(localStorage.getItem('TwoFactorTokenSecret') || null)
-  const totpCode = secret ? authenticator.generate(secret) : ''
-  const [ code, setCode ] = useState(totpCode)
-  const [ copyButtonText, setCopyButtonText ] = useState('Copy')
-  const [ refreshButtonText, setRefreshButtonText ] = useState('Refresh')
-  const [ progress, setProgress ] = useState(100);
+  const [secret, setSecret] = useState(
+    localStorage.getItem("TwoFactorTokenSecret") || null
+  );
+  const totpCode = secret ? authenticator.generate(secret) : "";
+  const [code, setCode] = useState(totpCode);
+  const [copyButtonText, setCopyButtonText] = useState("Copy");
+  const [refreshButtonText, setRefreshButtonText] = useState("Refresh");
+  const [progress, setProgress] = useState(100);
 
   const updateSecret = (event) => {
-    const newSecret = event.target.value
+    const newSecret = event.target.value;
     if (newSecret) {
-      setSecret(newSecret)
-      generateCode()
-      localStorage.setItem('TwoFactorTokenSecret', newSecret)
+      setSecret(newSecret);
+      generateCode();
+      localStorage.setItem("TwoFactorTokenSecret", newSecret);
     }
-  }
+  };
 
-  const copyToClipboard = str => {
-    const el = document.createElement('textarea')
-    el.value = str
-    document.body.appendChild(el)
-    el.select()
-    document.execCommand('copy')
-    document.body.removeChild(el)
+  const copyToClipboard = (str) => {
+    const el = document.createElement("textarea");
+    el.value = str;
+    document.body.appendChild(el);
+    el.select();
+    document.execCommand("copy");
+    document.body.removeChild(el);
 
-    setCopyButtonText('Copied')
-    setTimeout(() => setCopyButtonText('Copy'), 1500)
-  }
+    setCopyButtonText("Copied");
+    setTimeout(() => setCopyButtonText("Copy"), 1500);
+  };
 
   const theme = createTheme({
     palette: {
@@ -55,24 +57,24 @@ const TwoFactorTokenGenerator = () => {
   });
 
   const updateProgress = () => {
-    const secondElapsed = Math.round((Date.now()/1000)) % 30;
+    const secondElapsed = Math.round(Date.now() / 1000) % 30;
     const secondsRemain = 30 - secondElapsed;
-    const percentage = secondsRemain * 100 / 30;
+    const percentage = (secondsRemain * 100) / 30;
     setProgress(percentage);
 
     if (percentage < 10) {
       setTimeout(generateCode, 2000);
     }
-  }
+  };
 
   const generateCode = () => {
-    setRefreshButtonText(<HourglassFullIcon />)
-    const newTotpCode = secret ? authenticator.generate(secret) : ''
+    setRefreshButtonText(<HourglassFullIcon />);
+    const newTotpCode = secret ? authenticator.generate(secret) : "";
     if (newTotpCode !== code) {
-      setCode(newTotpCode)
+      setCode(newTotpCode);
     }
-    setTimeout(() => setRefreshButtonText('Refresh'), 100);
-  }
+    setTimeout(() => setRefreshButtonText("Refresh"), 100);
+  };
 
   window.addEventListener("focus", generateCode);
   window.addEventListener("load", () => {
@@ -80,40 +82,59 @@ const TwoFactorTokenGenerator = () => {
   });
 
   return (
-  <ThemeProvider theme={theme}>
-    <Card variant="outlined" >
-      <AppBar position="static" color="secondary" className={styles.appBar}>
-        <Toolbar>
-          <Typography variant="subtitle2">
-          Fill in your OTP secret to get the latest 2FA code. <br/>
-          Your secret is only cached locally and never sent over the internet.
-          </Typography>
-        </Toolbar>
-      </AppBar>
-      <CardContent>
-        <div className={styles.twoFactorContainer}>
-          <SecretField secret={secret} onChange={updateSecret} />
-          <div className={styles.result}>
-            <div>
-              Token: {code} &nbsp;
-              <CircularProgress variant="determinate" value={progress} size={20} />
+    <ThemeProvider theme={theme}>
+      <Card variant="outlined">
+        <AppBar position="static" color="secondary" className={styles.appBar}>
+          <Toolbar>
+            <Typography variant="subtitle2">
+              Fill in your OTP secret to get the latest 2FA code. <br />
+              Your secret is only cached locally and never sent over the
+              internet.
+            </Typography>
+          </Toolbar>
+        </AppBar>
+        <CardContent>
+          <div className={styles.twoFactorContainer}>
+            <SecretField secret={secret} onChange={updateSecret} />
+            <div className={styles.result}>
+              <div>
+                Token: {code} &nbsp;
+                <CircularProgress
+                  variant="determinate"
+                  value={progress}
+                  size={20}
+                />
+              </div>
+              <Button
+                variant="contained"
+                color="primary"
+                onClick={() => copyToClipboard(code)}
+                className={styles.refreshButton}
+              >
+                {copyButtonText}
+              </Button>{" "}
+              &nbsp;
+              <Button
+                variant="contained"
+                color="primary"
+                onClick={generateCode}
+                className={styles.refreshButton}
+              >
+                {refreshButtonText}
+              </Button>
             </div>
-            <Button variant="contained" color="primary" onClick={() => copyToClipboard(code)} className={styles.refreshButton}>{copyButtonText}</Button> &nbsp;
-            <Button variant="contained" color="primary" onClick={generateCode} className={styles.refreshButton}>{refreshButtonText}</Button>
           </div>
-        </div>
-      </CardContent>
-    </Card>
-    <div className={styles.footer}>
-      <Typography variant="body1">
-        <Link href="https://github.com/hex0cter/2fa-otp">
-          <GitHubIcon fontSize="small"/>
-        </Link>
-      </Typography>
-    </div>
-  </ThemeProvider>
+        </CardContent>
+      </Card>
+      <div className={styles.footer}>
+        <Typography variant="body1">
+          <Link href="https://github.com/hex0cter/2fa-otp">
+            <GitHubIcon fontSize="small" />
+          </Link>
+        </Typography>
+      </div>
+    </ThemeProvider>
+  );
+};
 
-  )
-}
-
-export default TwoFactorTokenGenerator
+export default TwoFactorTokenGenerator;
