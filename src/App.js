@@ -1,9 +1,9 @@
 import React from "react";
 import "./App.css";
-import TwoFactorTokenGenerator from "./components/TwoFactorTokenGenerator";
+import Main from "./components/Main";
 
 function App() {
-  return <TwoFactorTokenGenerator />;
+  return <Main />;
 }
 
 export default App;
