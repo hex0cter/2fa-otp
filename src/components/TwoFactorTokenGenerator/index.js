@@ -77,8 +77,7 @@ export default function TwoFactorTokenGenerator() {
         <SecretField secret={secret} onChange={updateSecret} />
         <div className={styles.result}>
           <div className={styles.token}>
-
-            2FA code: {code} &nbsp;
+            Code: {code} &nbsp;
             {code ?  <CircularProgress
               variant="determinate"
               value={progress}
