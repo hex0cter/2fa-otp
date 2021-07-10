@@ -1,5 +1,5 @@
 import { authenticator } from "otplib";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import HourglassFullIcon from "@material-ui/icons/HourglassFull";
 import CircularProgress from "@material-ui/core/CircularProgress";
 import CardContent from "@material-ui/core/CardContent";
@@ -9,7 +9,7 @@ import SecretField from "../SecretField";
 
 export default function TwoFactorTokenGenerator() {
   const [secret, setSecret] = useState(
-    localStorage.getItem("TwoFactorTokenSecret") || null
+    localStorage.getItem("TwoFactorTokenSecret") || ""
   );
   const totpCode = secret ? authenticator.generate(secret) : "";
   const [code, setCode] = useState(totpCode);
@@ -19,14 +19,14 @@ export default function TwoFactorTokenGenerator() {
 
   const updateSecret = (event) => {
     const newSecret = event.target.value;
-    if (newSecret) {
-      setSecret(newSecret);
-      generateCode();
-      localStorage.setItem("TwoFactorTokenSecret", newSecret);
-    }
+    setSecret(newSecret);
+    localStorage.setItem("TwoFactorTokenSecret", newSecret);
   };
 
   const copyToClipboard = (str) => {
+    if (str === "") {
+      return;
+    }
     const element = document.createElement("textarea");
     element.value = str;
     document.body.appendChild(element);
@@ -50,6 +50,11 @@ export default function TwoFactorTokenGenerator() {
   };
 
   const generateCode = () => {
+    if (!!!secret) {
+      setCode("");
+      return;
+    }
+
     setRefreshButtonText(<HourglassFullIcon />);
     const newTotpCode = secret ? authenticator.generate(secret) : "";
     if (newTotpCode !== code) {
@@ -57,6 +62,8 @@ export default function TwoFactorTokenGenerator() {
     }
     setTimeout(() => setRefreshButtonText("Refresh"), 100);
   };
+
+  useEffect(generateCode, [secret, code]);
 
   window.addEventListener("focus", generateCode);
   window.addEventListener("load", () => {
@@ -69,13 +76,14 @@ export default function TwoFactorTokenGenerator() {
       <div className={styles.twoFactorContainer}>
         <SecretField secret={secret} onChange={updateSecret} />
         <div className={styles.result}>
-          <div>
-            Token: {code} &nbsp;
-            <CircularProgress
+          <div className={styles.token}>
+
+            2FA code: {code} &nbsp;
+            {code ?  <CircularProgress
               variant="determinate"
               value={progress}
               size={20}
-            />
+            /> : null}
           </div>
           <Button
             variant="contained"
